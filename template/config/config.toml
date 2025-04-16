@@ -15,7 +15,3 @@ mechanisms = ["plain"]
 
 [server.domain]
 local_domains = ["mail.${DOMAIN}", "${DOMAIN}"]
-
-[admin]
-enabled = true
-bind = "0.0.0.0:8080"
