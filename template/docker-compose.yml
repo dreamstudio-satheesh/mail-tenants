@@ -1,0 +1,25 @@
+services:
+  mail:
+    image: stalwartlabs/mail-server:latest
+    container_name: mail-${DOMAIN}
+    restart: unless-stopped
+    volumes:
+      - ./config:/etc/stalwart:ro
+      - mail_queue_${DOMAIN}:/var/stalwart/queue
+    environment:
+      - SERVER__SERVER_TYPE=smtp
+      - CACHE__REDIS__URL=redis://10.1.0.2:6379
+      - DB__POSTGRES__URL=jdbc:postgresql://10.1.0.2:5432/${DB_NAME}
+    networks:
+      - mail_net
+    expose:
+      - "465"
+      - "587"
+      - "993"
+
+volumes:
+  mail_queue_${DOMAIN}:
+
+networks:
+  mail_net:
+    driver: bridge

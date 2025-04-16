@@ -1,0 +1,17 @@
+[server.listener.submission]
+bind = "[::]:587"
+protocol = "smtp"
+
+[server.listener.smtps]
+bind = "[::]:465"
+protocol = "smtp"
+
+[server.listener.imaps]
+bind = "[::]:993"
+protocol = "imap"
+
+[server.auth]
+mechanisms = ["plain"]
+
+[server.domain]
+local_domains = ["mail.${DOMAIN}", "${DOMAIN}"]
