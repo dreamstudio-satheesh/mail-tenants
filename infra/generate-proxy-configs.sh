@@ -80,5 +80,5 @@ echo "[✓] Caddyfile generated"
 
 # -------------------------
 echo "[+] Restarting proxy containers..."
-docker restart mail-haproxy mail-caddy
+docker restart infra-haproxy infra-caddy
 echo "[✓] All done."
