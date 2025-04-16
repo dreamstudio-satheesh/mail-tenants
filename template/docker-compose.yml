@@ -13,6 +13,7 @@ services:
     networks:
       - mail_net
     expose:
+      - "25"
       - "465"
       - "587"
       - "993"
@@ -22,4 +23,4 @@ volumes:
 
 networks:
   mail_net:
-    driver: bridge
+    external: true

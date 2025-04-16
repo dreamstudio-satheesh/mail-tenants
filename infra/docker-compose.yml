@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: infra-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mailadmin
+      POSTGRES_PASSWORD: strongpassword
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./postgres/conf/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf:ro
+    command: ["postgres", "-c", "hba_file=/var/lib/postgresql/data/pg_hba.conf"]
+    networks:
+      - mail_net
+
+  redis:
+    image: redis:7
+    container_name: infra-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - mail_net
+
+  haproxy:
+    image: haproxy:latest
+    container_name: infra-haproxy
+    restart: unless-stopped
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - "25:25"
+      - "465:465"
+      - "587:587"
+      - "993:993"
+    networks:
+      - mail_net
+
+  caddy:
+    image: caddy:alpine
+    container_name: infra-caddy
+    restart: unless-stopped
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - mail_net
+
+volumes:
+  pg_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  mail_net:
+    driver: bridge
