@@ -24,9 +24,15 @@ fi
 mkdir -p "$TENANT_DIR"
 cp -r "$TEMPLATE_DIR/"* "$TENANT_DIR/"
 
+# === Generate random port and admin token ===
+ADMIN_PORT=$(shuf -i 18000-18999 -n 1)
+ADMIN_TOKEN=$(openssl rand -hex 12)
+
 # === Replace placeholders ===
 sed -i "s|\${DOMAIN}|${DOMAIN}|g" "$TENANT_DIR/docker-compose.yml"
 sed -i "s|\${DB_NAME}|${DB_NAME}|g" "$TENANT_DIR/docker-compose.yml"
+sed -i "s|\${ADMIN_PORT}|${ADMIN_PORT}|g" "$TENANT_DIR/docker-compose.yml"
+sed -i "s|\${ADMIN_TOKEN}|${ADMIN_TOKEN}|g" "$TENANT_DIR/docker-compose.yml"
 sed -i "s|\${DOMAIN}|${DOMAIN}|g" "$TENANT_DIR/config/config.toml"
 
 # === PostgreSQL: Create DB ===
@@ -49,4 +55,6 @@ docker network inspect "$NETWORK_NAME" >/dev/null 2>&1 || {
 cd "$TENANT_DIR"
 docker compose up -d
 
-echo "✅ Tenant '$DOMAIN' is up and using database '$DB_NAME'."
+echo "✅ Tenant '$DOMAIN' is running"
+echo "🔐 Admin UI: http://<mail1-ip>:${ADMIN_PORT}"
+echo "🔑 Admin Token: ${ADMIN_TOKEN}"

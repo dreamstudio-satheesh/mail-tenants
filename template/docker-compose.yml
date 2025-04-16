@@ -7,17 +7,16 @@ services:
       - ./config:/etc/stalwart:ro
       - mail_queue_${DOMAIN}:/var/stalwart/queue
     environment:
-      - SERVER__SERVER_TYPE=smtp
       - CACHE__REDIS__URL=redis://10.1.0.2:6379
       - DB__POSTGRES__URL=jdbc:postgresql://10.1.0.2:5432/${DB_NAME}
+      - ADMIN__ENABLED=true
+      - ADMIN__BIND=0.0.0.0:8080
+      - ADMIN__TOKEN=${ADMIN_TOKEN}
+    ports:
+      - "${ADMIN_PORT}:8080"
     networks:
       - mail_net
-    expose:
-      - "25"
-      - "465"
-      - "587"
-      - "993"
-      - "8080"
+
 volumes:
   mail_queue_${DOMAIN}:
 
