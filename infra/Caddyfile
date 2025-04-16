@@ -1,0 +1,11 @@
+# Admin portal or status endpoint (optional)
+dreamcoderz.com {
+    tls you@example.com
+    respond "Admin Panel Coming Soon"
+}
+
+# Healthcheck endpoint for monitoring
+infra.dreamcoderz.com {
+    tls you@example.com
+    respond "OK"
+}

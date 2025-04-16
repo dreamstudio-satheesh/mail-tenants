@@ -8,8 +8,8 @@ services:
       POSTGRES_PASSWORD: strongpassword
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./postgres/conf/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf:ro
-    command: ["postgres", "-c", "hba_file=/var/lib/postgresql/data/pg_hba.conf"]
+      - ./postgres/conf/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    command: ["postgres", "-c", "hba_file=/etc/postgresql/pg_hba.conf"]
     networks:
       - mail_net
 
@@ -41,7 +41,7 @@ services:
     container_name: infra-caddy
     restart: unless-stopped
     volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     ports:
